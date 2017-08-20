@@ -2,18 +2,20 @@
 ## index.js
 `index.js` is the entry point.
 
+### `yargs.command`
 `yargs.command`
 This method returns `yargs` object
 
 ``` javascript
 const yargs = require('yargs');
 
-const argv = 
-  yargs.command('serve', 'start your server', () => {}, (argv) => {
+const yargsObj = 
+  yargs.command('*', 'start your server', () => {}, (argv) => {
+    argv = JSON.stringify(argv);
     console.log(`argv: ${argv}`);
   });
 
-console.log(argv);
+console.log(yargsObj);
 
 // execute result
 { '$0': 'index.js',
@@ -100,11 +102,43 @@ console.log(argv);
 Usually, `argv: [Getter]` is useful for us.
 
 ``` javascript
-console.log(argv.argv);
+console.log(yargsObj.argv);
 
-// execute node index.js --serve=111, and result is
-{ _: [], serve: 111, '$0': 'index.js' }
+// execute `node index.js`, and result is
+{ _: [], '$0': 'index.js' }
+
+// execute `node index.js --test=111`, and result is
+{ _: [], test: 111, '$0': 'index.js' }
 ```
+
+Notice, value behind `--` is different from common command as following.
+
+``` javascript
+// execute `node index.js server`, and result is
+argv: {"_":["server"],"$0":"index.js"}
+{ _: [ 'server' ], '$0': 'index.js' }
+
+// The yargs handler is triggered.
+```
+
+Variables behind `node index.js`(without `--`) will be push into `_` properties.
+``` javascript
+// execute `node index.js aaa bbb ccc`
+{ _: [ 'aaa', 'bbb', 'ccc' ], '$0': 'index.js' }
+```
+
+### `.demandCommand([min=1], [minMsg])`
+``` javascript
+// example:
+// provide a minimum demand and a minimum demand message
+.demandCommand(1, 'You need at least one command before moving on')
+```
+
+
+
+
+
+
 
 
 
