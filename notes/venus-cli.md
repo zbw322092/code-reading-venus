@@ -134,6 +134,34 @@ Variables behind `node index.js`(without `--`) will be push into `_` properties.
 .demandCommand(1, 'You need at least one command before moving on')
 ```
 
+## ./lib/serve.js
+`builder` in `yargs.command` tells `yargs` how this `cmd` construct, with some proper options.
+``` javascript
+exports.builder = (yargs) => {
+  yargs
+    .example(chalk.black.bold('`$0 serve [-m="a,b,c"]` to start dev server with given modules'))
+    .option('m', {
+      alias: 'modules',
+      demandOption: true,
+      default: '',
+      describe: chalk.black.bold('you should project modules')
+    })
+    .updateStrings({
+      'Examples:': chalk.cyan.bold("Examples:")
+    });
+};
+```
+
+The above `yargs.example` info will be shown when we execute `venus serve -h` and this property is belongs to `serve` cmd only. So when we execute `venus -h`, the above example info will not shown up.
+
+
+The result of `venus serve` will be passed to its handler, leading to following steps to be execute.
+``` javascript
+exports.handler = (argv) => {
+  webpackTask.exec('serve', { modules: argv.modules });
+}
+```
+
 
 
 
