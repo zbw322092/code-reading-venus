@@ -50,8 +50,29 @@ one, get **absloute path** of script working directory.
 two, exports a function, which will accept a relative path and return a final path based on above absloute path.
 
 
+### ./lib/WebpackDevServerUtils.js
+#### `choosePort` method.
+`detect` is a simple free port detector module.
+The `Promise` instance in `choosePort` method, if a port number is accept, this port will be passed into `resolve` method.
+
+`is-root` simply return whether this user is root user.
+
+This method does following works:
+1. detect whether given port is occpied
+    yes => check free port
+    no => use this given port
+
+2. if given port is occpied, get a new port, and telling user(using `inquirer`), your given port is used by some command in some directory, whether to use this new free port.
+  yes => use this new port
+  no => `resolve null`
+
+### ./lib/clearConsole.js
+This module clear console by two steps:
+one, using `process.platform` to estimate OS platform.
+two, clear console by write specified string via `process.stdout`
 
 
+### ./lib/getProcessForPort.js
+`getProcessForPort` return a line of sentence which indicates which command execute in which directory. Or, if the given port is not occupied, return `null`.
 
-
-
+In this module, we pass in a `port` number, then, this module check corresponding `tcp process id`. Using this `tcp process id` to get execute directory and execute command.
