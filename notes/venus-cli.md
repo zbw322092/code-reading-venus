@@ -162,6 +162,12 @@ exports.handler = (argv) => {
 }
 ```
 
+### ./lib/webpackTask.js
+webpackTask.js dose two things.
+One, format and organise user input.
+Two, executing script according to last step result.
+
+
 
 
 
