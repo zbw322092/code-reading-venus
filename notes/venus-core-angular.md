@@ -1,6 +1,37 @@
 # venus-core-angular
 ## webpack/scripts
 ### serve.js
+`serve.js` module is just a **'gather point'** -- detailed works like, generating config objects, are done in other separated modules. `serve.js` just invokes, organise them and finally run `webpack` dev serve, if no errors.
+
+Before diving into `serve.js`, let's have a short but helpful example to get a roughly idea what `webpack-dev-server` config file should looks like. Following below link:
+https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/server.js
+
+Let's have a look what `serve.js` roughly does.
+1. handle `process` `unhandledRejection` error.
+2. set NODE_ENV as `development`
+3. determine whethe it is `isTTY` context.
+4. get some config value
+    -> short env name
+    -> host
+    -> default port
+5. perform inquire, ensure module entries typed by user.
+    -> if no, return
+    -> if yes, continue
+6. get a free to use port, according given default port and host.
+7. create `compiler` instance.
+    -> `webpackConfig.getWebpackConfig()` return a **webpack config object** according to `env` and `webpackRoot` variables.
+    -> passing `webpack` module, above generated webpack config object and `appName` into `createCompiler` method, to generate the `compiler` instance.
+
+8. get `proxy` related config and process it to generate `proxyConfig`.
+9. pass above generated `proxyConfig` and host url into `createDevServerConfig` method, which will return us a **`webpack-dev-server` config object**.
+10. pass above generated **`compiler` instance** and **`webpack-dev-server` config object** into `WebpackDevServer` constructor to create a `devServer` instance.
+11. listen `webpack-dev-server` on selected free port and host.
+12. in server listen callback, execute `supervisor` command, which will execute `server/index.js` to start Express server. Also, `VENUS_MODULES` and `VENUS_WEBPACK_PORT` argvs will also provided.
+13. defined `process signal events`. If `SIGINT` or `SIGTERM` events emits, close the `webpack-dev-server` and exit `process`.
+
+
+
+
 
 
 ----------------------------------------------------------------
@@ -78,6 +109,15 @@ In `getWebpackConfig` method we extend/merge webpack config according to `webpac
 The module does two thing:
 1. detecting whether it is `prodution` env.
 2. shorten env name. `production` => `prod` `development` => `dev`
+
+### webpackDevServer.js
+This module exports a `webpack-dev-server` config object.
+https://github.com/webpack/webpack-dev-server
+> Serves a webpack app. Updates the browser on changes.
+
+https://webpack.js.org/configuration/dev-server/#devserver
+
+It is some standard API configurations. The key point is understading the usage of these APIs, which needs some relative background knowledge and practice experience. Referencing the api docs when read this module.
 
 
 

@@ -104,3 +104,11 @@ Dealing with path trailing `/`.
 I need it => add or keep(if already has)
 I do not need it => remove or keep(if it does not have)
 
+### ./lib/errorOverlayMiddleware.js
+This module simply exports `react-error-overlay/middleware`
+
+### ./lib/noopServiceWorkerMiddleware.js
+This module deals with `service-worker`. By now, it just responses a piece of JS script when `req.url === '/service-worker.js'`, otherwise, just go `next()`.
+
+
+
