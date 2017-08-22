@@ -66,6 +66,27 @@ This method does following works:
   yes => use this new port
   no => `resolve null`
 
+#### `createCompiler` method
+`createCompiler` method:
+1. create a `compiler` and finally return this `compiler`.
+2. deal with this `compiler` events: 
+    `invalid`
+    `done`
+    --> `done with error`
+    --> `done with warning`
+
+`createCompiler` method uses `webpack` node.js API to generate a `compiler` instance.
+`webpack` node api:
+https://webpack.js.org/api/node/
+<br>
+
+`compiler` instance intro:
+https://webpack.js.org/api/plugins/compiler/
+
+
+
+
+
 ### ./lib/clearConsole.js
 This module clear console by two steps:
 one, using `process.platform` to estimate OS platform.
@@ -76,3 +97,10 @@ two, clear console by write specified string via `process.stdout`
 `getProcessForPort` return a line of sentence which indicates which command execute in which directory. Or, if the given port is not occupied, return `null`.
 
 In this module, we pass in a `port` number, then, this module check corresponding `tcp process id`. Using this `tcp process id` to get execute directory and execute command.
+
+
+### ./lib/ensureSlash.js
+Dealing with path trailing `/`.
+I need it => add or keep(if already has)
+I do not need it => remove or keep(if it does not have)
+
